@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:component-scan base-package="com.cardvalue.penguin.service.*" >
+       <!-- <context:exclude-filter type="regex" expression=".*Db.*ServiceImpl"/>-->
+    </context:component-scan>
+
+    <aop:aspectj-autoproxy />
+
+    <mvc:annotation-driven />
+
+    <!-- spring 启动定时器-->
+    <task:annotation-driven/>
+    <context:annotation-config/>
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>
+
+
+    <bean id="utilRepository" class="com.cardvalue.penguin.repository.jpa.UtilRepositoryImpl"></bean>
+    <bean id="logService" class="com.cardvalue.penguin.util.LogServiceImpl"></bean>
+    <bean id="addServiceBindingStub" class="cn.cvbaoli.www.AddServiceBindingStub"></bean>
+
+    <!--&lt;!&ndash;本地供外部调用接口&ndash;&gt;-->
+    <!--<bean class="org.springframework.remoting.jaxws.SimpleHttpServerJaxWsServiceExporter"  p:hostname="${ws.local.ip}" p:port="${ws.local.ws.port}" p:basePath="/services/"/>-->
+
+    <!--短信接口-->
+    <bean id="smsBusinessService" class="com.jianzhou.sdk.BusinessService">
+        <constructor-arg name="endPoint" value="${ws.sms.url}"/>
+    </bean>
+
+    <!-- 获取商户流水验证问题接口 -->
+    <bean id="merchantServiceImplPortBindingStub" class="com.cardvalue.cas.service.impl.MerchantServiceImplPortBindingStub">
+        <constructor-arg name="endpointURL" value="${ws.question.url}"/>
+        <constructor-arg name="service">
+            <null/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="xmlConverter" class="com.cardvalue.penguin.util.XMLConverter">
+        <property name="marshaller" ref="castorMarshaller" />
+        <property name="unmarshaller" ref="castorMarshaller" />
+    </bean>
+    <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller" >
+        <property name="mappingLocation" value="classpath:mapping.xml" />
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.cardvalue.cn" />
+        <property name="username" value="wx@cardvalue.cn" />
+        <property name="password" value="wx@cardvalue" />
+        <property name="port" value="25" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <import resource="classpath:spring-jpa.xml"/>
+    <import resource="spring-security.xml"/>
+
+    <!-- 支持上传文件 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+</beans>

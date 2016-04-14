@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# Igonre config file
+.idea/
+
+# Igonre target dir
+domain/target
+service/target
+web/target
+target/
+
+# Igonre iml config file
+*.iml

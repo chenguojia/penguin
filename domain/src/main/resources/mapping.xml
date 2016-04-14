@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping>
+    <class name="com.cardvalue.penguin.dto.WeChatMessage">
+        <map-to xml="xml" />
+
+        <field name="toUserName" type="string">
+            <bind-xml name="ToUserName" node="element" />
+        </field>
+
+        <field name="fromUserName" type="string">
+            <bind-xml name="FromUserName" node="element" />
+        </field>
+
+        <field name="createTime" type="string">
+            <bind-xml name="CreateTime" node="element" />
+        </field>
+
+        <field name="msgType" type="string">
+            <bind-xml name="MsgType" node="element" />
+        </field>
+
+        <field name="content" type="string">
+            <bind-xml name="Content" node="element" />
+        </field>
+
+        <field name="msgId" type="string">
+            <bind-xml name="MsgId" node="element" />
+        </field>
+
+        <field name="event" type="string">
+            <bind-xml name="Event" node="element" />
+        </field>
+
+        <field name="eventKey" type="string">
+            <bind-xml name="EventKey" node="element" />
+        </field>
+
+        <field name="ticket" type="string">
+            <bind-xml name="Ticket" node="element" />
+        </field>
+
+        <field name="articleCount" type="string">
+            <bind-xml name="ArticleCount" node="element" />
+        </field>
+
+        <field name="articles" type="com.cardvalue.penguin.dto.NewsItem" collection="arraylist">
+            <bind-xml name="item" location="Articles" />
+        </field>
+
+        <field name="latitude" type="double">
+            <bind-xml name="Latitude" node="element" />
+        </field>
+
+        <field name="longitude" type="double">
+            <bind-xml name="Longitude" node="element" />
+        </field>
+
+        <field name="precision" type="double">
+            <bind-xml name="Precision" node="element" />
+        </field>
+
+        <field name="picUrl" type="string">
+            <bind-xml name="PicUrl" node="element" />
+        </field>
+
+        <field name="mediaId" type="string">
+            <bind-xml name="MediaId" node="element" />
+        </field>
+
+        <field name="menuId" type="string">
+            <bind-xml name="MenuId" node="element" />
+        </field>
+
+    </class>
+
+    <class name="com.cardvalue.penguin.dto.NewsItem">
+        <field name="title" type="string" >
+            <bind-xml name="Title" node="element" />
+        </field>
+        <field name="description" type="string" >
+            <bind-xml name="Description" node="element" />
+        </field>
+        <field name="picUrl" type="string" >
+            <bind-xml name="PicUrl" node="element" />
+        </field>
+        <field name="url" type="string" >
+            <bind-xml name="Url" node="element" />
+        </field>
+    </class>
+</mapping>

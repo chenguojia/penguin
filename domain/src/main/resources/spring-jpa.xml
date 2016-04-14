@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <context:property-placeholder location="classpath:environment.properties"
+                                  file-encoding="UTF-8" system-properties-mode="OVERRIDE" />
+
+    <jpa:repositories base-package="com.cardvalue.penguin.repository" />
+
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="poolProperties">
+            <bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+                <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+                <property name="url" value="${db.url}" />
+                <property name="username" value="${db.username}" />
+                <property name="password" value="${db.password}" />
+                <property name="validationInterval" value="30000" />
+                <property name="validationQuery" value="SELECT 1" />
+                <property name="testOnBorrow" value="true" />
+                <property name="timeBetweenEvictionRunsMillis" value="5000" />
+                <property name="maxActive" value="${db.maxActive}" />
+                <property name="initialSize" value="${db.initialSize}" />
+                <property name="minIdle" value="${db.minIdle}" />
+                <property name="maxWait" value="5000" />
+                <property name="minEvictableIdleTimeMillis" value="50000" />
+                <property name="removeAbandoned" value="true" />
+                <property name="removeAbandonedTimeout" value="60" />
+
+            </bean>
+        </property>
+    </bean>
+
+    <bean  class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+        </property>
+    </bean>
+
+    <bean id="jpaVendorAdapter"
+          class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="database" value="MYSQL" />
+        <property name="showSql" value="true" />
+    </bean>
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+        <property name="persistenceUnitName" value="em" />
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="hibernate.cache.use_query_cache" value="true" />
+                <entry key="hibernate.cache.use_second_level_cache" value="true" />
+                <entry key="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" />
+                <entry key="net.sf.ehcache.configurationResourceName" value="META-INF/ehcache.xml" />
+                <entry key="javax.persistence.sharedCache.mode" value="ENABLE_SELECTIVE" />
+                <entry key="hibernate.hbm2ddl.auto" value="none" />
+            </map>
+        </property>
+        <property name="packagesToScan"
+                  value="com.cardvalue.penguin.model, com.cardvalue.penguin.dto" />
+    </bean>
+
+    <tx:annotation-driven />
+
+</beans>

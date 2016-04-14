@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<decorators defaultDir="/WEB-INF/layout">
+
+      <excludes>
+              <pattern>/resources/*</pattern>
+              <pattern>/background/*</pattern>
+              <pattern>/report/*</pattern>
+              <pattern>/fileUpload</pattern>
+
+       </excludes>
+       <!--新版商户装修页面-->
+       <decorator name="newMerchant" page="merchant-main.jsp">
+              <pattern>/new/m/*</pattern>
+              <pattern>/coupon/**</pattern>
+              <pattern>/info/**</pattern>
+              <pattern>/regular/**</pattern>
+              <pattern>/info/inviteRecord</pattern>
+       </decorator>
+
+
+</decorators>

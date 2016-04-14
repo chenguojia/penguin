@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!--新商户验证-->
+    <http pattern="/new/m/**" use-expressions="true">
+        <intercept-url pattern="/new/m/enter" access="permitAll()" />
+        <intercept-url pattern="/new/m/welcome/*" access="permitAll()" />
+        <intercept-url pattern="/new/m/getMultiLngAndLat" access="permitAll()" />
+
+        <intercept-url pattern="/new/m/more/regular" access="permitAll()" />
+        <intercept-url pattern="/new/m/login" access="permitAll()" />
+        <intercept-url pattern="/new/m/login/show" access="permitAll()" />
+        <intercept-url pattern="/new/m/bind" access="permitAll()" />
+        <intercept-url pattern="/new/m/bind/show" access="permitAll()" />
+        <intercept-url pattern="/new/m/verify/query" access="permitAll()" />
+        <intercept-url pattern="/new/m/clientVersion/query" access="permitAll()" />
+        <intercept-url pattern="/new/m/loadRefundDetail" access="permitAll()" />
+        <intercept-url pattern="/new/m/forgetPassword" access="permitAll()" />
+        <intercept-url pattern="/new/m/forgetPassword/show" access="permitAll()" />
+        <intercept-url pattern="/new/m/getCheckCode/query" access="permitAll()" />
+
+        <intercept-url pattern="/new/m/getCheckCode" access="permitAll()" />
+        <intercept-url pattern="/new/m/more/*" access="permitAll()" />
+        <intercept-url pattern="/new/m/clause/*" access="permitAll()" />
+        <intercept-url pattern="/new/m/**" access="hasRole('ROLE_NEW_MERCHANT')" />
+        <form-login login-page="/new/m/login/show" authentication-success-handler-ref="authSuccessHandler" authentication-failure-handler-ref="authFailureHandler" />
+        <logout logout-success-url="/new/m/login/show" logout-url="/new/m/j_spring_security_logout" />
+    </http>
+
+
+    <http auto-config="true" use-expressions="true">
+        <intercept-url pattern="/new/m/login/show" access="permitAll()" />
+        <intercept-url pattern="/resources/**" access="permitAll()" />
+        <intercept-url pattern="/code/**" access="permitAll()" />
+        <intercept-url pattern="/check/**" access="permitAll()" />
+        <intercept-url pattern="/regular/**"  access="permitAll()" />
+        <intercept-url pattern="/we/**" access="permitAll()" />
+        <intercept-url pattern="/public/**" access="permitAll()" />
+
+        <intercept-url pattern="/upload/**" access="hasAnyRole('ROLE_NEW_MERCHANT','ROLE_STAFF','ROLE_MERCHANT')" />
+        <intercept-url pattern="/application/**" access="hasAnyRole('ROLE_NEW_MERCHANT','ROLE_STAFF','ROLE_MERCHANT')" />
+        <intercept-url pattern="/coupon/**" access="hasAnyRole('ROLE_NEW_MERCHANT','ROLE_STAFF','ROLE_MERCHANT')" />
+        <intercept-url pattern="/info/**" access="hasAnyRole('ROLE_NEW_MERCHANT','ROLE_STAFF','ROLE_MERCHANT')" />
+        <intercept-url pattern="/cross/domain/**" access="hasAnyRole('ROLE_NEW_MERCHANT','ROLE_STAFF','ROLE_MERCHANT')" />
+        <intercept-url pattern="/**" access="hasAnyRole('ROLE_SALES','ROLE_STAFF','ROLE_MERCHANT')" />
+        <form-login login-page="/new/m/login/show" authentication-success-handler-ref="authSuccessHandler" authentication-failure-handler-ref="authFailureHandler" />
+        <logout logout-success-url="/new/m/login/show" logout-url="/new/m/j_spring_security_logout" />
+    </http>
+
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="authService" />
+    </authentication-manager>
+
+    <beans:bean id="authSuccessHandler" class="com.cardvalue.penguin.service.auth.AuthenticationSuccessHandlerImpl"/>
+    <beans:bean id="authFailureHandler" class="com.cardvalue.penguin.service.auth.AuthenticationFailureHandlerImpl"/>
+
+</beans:beans>
